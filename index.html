@@ -10,8 +10,10 @@
     <meta name="author" content="와이디">
     
     
+        <link rel="icon" href="http://example.com/assets/images/source/_images/yd.jpg">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"와이디","sameAs":["https://github.com/Youngdong2","nasa1993@naver.com"]},"name":"데이터과학 with 와이디","description":"","url":"http://example.com"}</script>
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"와이디","sameAs":["https://github.com/Youngdong2","nasa1993@naver.com"],"image":"source/_images/avatar.jpg"},"name":"데이터과학 with 와이디","description":"","url":"http://example.com"}</script>
     <meta property="og:type" content="blog">
 <meta property="og:title" content="데이터과학 with 와이디">
 <meta property="og:url" content="http://example.com/index.html">
@@ -23,6 +25,8 @@
     
         
     
+    
+        <meta property="og:image" content="http://example.com/assets/images/source/_images/avatar.jpg"/>
     
     
     
@@ -42,6 +46,15 @@
 
     <!--STYLES END-->
     
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5WGDKYGPL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-E5WGDKYGPL');
+    </script>
+
 
     
 
@@ -53,6 +66,10 @@
             <!-- Define author's picture -->
 
 
+    
+        
+            
+        
     
 
 <header id="header" data-behavior="2">
@@ -75,6 +92,8 @@
             >
         
         
+            <img class="header-picture" src="/assets/images/source/_images/avatar.jpg" alt="Author&#39;s picture"/>
+        
         </a>
     
 </header>
@@ -82,8 +101,26 @@
             <!-- Define author's picture -->
 
 
+
+        
+    
+
 <nav id="sidebar" data-behavior="2">
     <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/source/_images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">와이디</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
+</h5>
+                
+            </div>
         
         
             <ul class="sidebar-buttons">
@@ -279,10 +316,6 @@
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
                     
-                        
-
-
-                    
                     
                         <p>
                             <a
@@ -323,11 +356,17 @@
         
 
 
+    
+        
+    
+
 <div id="about">
     <div id="about-card">
         <div id="about-btn-close">
             <i class="fa fa-times"></i>
         </div>
+        
+            <img id="about-card-picture" src="/assets/images/source/_images/avatar.jpg" alt="Author&#39;s picture"/>
         
             <h4 id="about-card-name">와이디</h4>
         
@@ -342,6 +381,12 @@
 
             </div>
         
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Seoul Korea
+            </div>
         
     </div>
 </div>
