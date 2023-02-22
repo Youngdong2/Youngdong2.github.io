@@ -55,4 +55,33 @@ $$
 
 ![fig3]({{site.url}}/images/2023-02-18-anomaly_paper/fig3.png)
 
-* 
+* 일반적으로 $E_i$는 대부분 정삼 범위에 있다. (논문에서는 local noises라고 지칭)
+* 한 주기의 다른 시간대에서는 local 변동이 다르며 다른 주기의 같은 시간대에서는 일반적으로 유사한 변동을 가진다. (논문에서는 이를 periodic pattern이라고 본다)
+* 때문에 smoothing처리를 하는 것은 주로 이런 local 노이즈와 주기적 패턴의 영향을 제거하고 정상 변동을 0에 가깝게 만들고 잠재적 이상치 변동만 유지하는 것이고 이는 본 논문의 핵심이다.
+
+#### First-step Smoothing
+* first-step smoothing은 추출된 변동값 $E_i$를 순차적으로 처리해서 local 노이즈를 제거하는 데 사용된다. 다음과 같은 수식으로 이루어져 있다.
+$$
+\vartriangle \sigma= \sigma(E_{i-s, i})-\sigma(E_{i-s, i-1}) \\ F_i=max(\vartriangle \sigma, 0)
+$$
+수식에 대해 잠깐 알아보자.
+
+* $\vartriangle \sigma$는 현재 window인 $E_{i-s,i-1}$에 $E_i$가 추가되었을 때 std의 변화량이다. 즉, 현재 시점에 편차를 크게 하는 값이 들어왔다면 $\vartriangle \sigma$는 양수값이 될 것이다.
+* $F_i$는 first-step smoothing 처리 후 time $i$에서의 변동값이다. 즉, local에서 변동성이 작은 값들은 0으로 처리해주는 과정이다.
+
+코드로는 다음과 같이 짤 수 있을 것 같다.
+
+```python
+def first_smoothing(data: Series, s: int):
+    F = [None] * len(data)
+    ma = data.rolling(s).mean()
+    remainder = data - ma
+    f = []
+    for i in range(s, len(remainder)):
+        delta_sigma = np.std(remainder[i-s:i]) - np.std(remainder[i-s:i-1])
+        f_i = max(delta_sigma, 0)
+        f.append(f_i)
+        F[s:] = f
+
+    return F
+```
