@@ -44,7 +44,7 @@ error는 현재값과 예측값을 통해 계산한다.
 
 $$E=[E_1,..., E_n]$$
 
-$$E_i=X_i-EWMA(X_{i-s,i-1})$$
+
 
 * 이 예측값은 기대값으로도 볼 수 있기 때문에 $E_i$는 $i$시점의 local 변동성이라고 할 수 있다.
 ### Two-step Smoothing Processing
