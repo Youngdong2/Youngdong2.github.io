@@ -4,6 +4,7 @@ title: "[Paper Review] FluxEV: A Fast and Effective Unsupervised Framework Time-
 categories: Paper_Review
 use_math: true
 comments: ture
+toc: true
 ---
 
 본 논문은 실시간 이상탐지를 보다 효과적이고 빠르게 수행하는 방법론을 소개하고 있습니다. 본 포스팅은 본 논문의 요약 및 해석에 중점을 두고 있기 때문에 번역체가 빈번하게 나올 수 있으므로 양해바랍니다. 목차는 다음과 같습니다.
