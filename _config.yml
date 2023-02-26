@@ -290,5 +290,9 @@ defaults:
       share: true
       related: true
       show_data: true
+      toc: true
+      toc_sticky: true
+      toc_label: 목차
+      toc_icon: "fa-sharp fa-solid fa-list"
 
 date_format: "%Y-%m-%d"
