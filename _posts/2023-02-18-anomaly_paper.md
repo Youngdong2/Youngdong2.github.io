@@ -57,9 +57,10 @@ $\begin{align} E=[E_1,...,E_n] \end{align}$
 
 #### 4.2.1 First-step Smoothing
 * first-step smoothing은 추출된 변동값 $E_i$를 순차적으로 처리해서 local 노이즈를 제거하는 데 사용된다. 다음과 같은 수식으로 이루어져 있다.
-$$
-\vartriangle \sigma= \sigma(E_{i-s, i})-\sigma(E_{i-s, i-1}) \\ F_i=max(\vartriangle \sigma, 0)
-$$
+$\begin{align} \vartriangle \sigma= \sigma(E_{i-s, i})-\sigma(E_{i-s, i-1})
+\end{align}$
+$\begin{align} F_i=max(\vartriangle \sigma, 0)
+\end{align}$
 수식에 대해 잠깐 알아보자.
 
 * $\vartriangle \sigma$는 현재 window인 $E_{i-s,i-1}$에 $E_i$가 추가되었을 때 std의 변화량이다. 즉, 현재 시점에 편차를 크게 하는 값이 들어왔다면 $\vartriangle \sigma$는 양수값이 될 것이다.
@@ -87,7 +88,7 @@ def first_smoothing(data: Series, s: int):
 * 주기적 데이터에 대한 작업을 수행하기 전에 고려해야 할 한가지 이슈는 data drift이다. 즉, 다른 기간의 동일한 시간대에서는 일반적으로 유사한 변동을 나타내지만 엄격하게 보면 일대일 대응은 아니다. 이를 해결하기 위해 data drift를 처리하는 데 간단한 방법을 제안한다.
 * 현재 값: $X_t$, 주기의 길이: $l$, 현재 시간의 $p$번째 주기 전에 대해서, $max(X_{t-pl-d},..., X_{t-pl-1}, X_{t-pl},X_{t-pl+1},...,X_{t-pl+d})$를 사용하여 주기적 처리를 한다.
 * second-step smoothing의 정의는 다음과 같다.
-$\begin{align}  M_{i-d}=max(F_{i-2d,i}) \end{align}$
+$\begin{flalign}  M_{i-d}=max(F_{i-2d,i}) \end{flalign}$
 $\begin{align} \vartriangle F_i=F_i-max(M_{i-l(p-1)},...,M_{i-dl},M_{i-l}) \end{align}$
 $\begin{align} S_i=max(\vartriangle F_i, 0) \end{align}$
 
