@@ -42,9 +42,7 @@ author_profile: false
 * LSTM, GRU같은 딥러닝 모델들을 대신해 예측모델로 EWMA를 사용한다.
 error는 현재값과 예측값을 통해 계산한다.
 
-$$E=[E_1,...,E_n]$$
-
-
+$\begin{align} E=[E_1,...,E_n] \end{align}$
 
 * 이 예측값은 기대값으로도 볼 수 있기 때문에 $E_i$는 $i$시점의 local 변동성이라고 할 수 있다.
 ### 4.2 Two-step Smoothing Processing
@@ -89,8 +87,6 @@ def first_smoothing(data: Series, s: int):
 * 주기적 데이터에 대한 작업을 수행하기 전에 고려해야 할 한가지 이슈는 data drift이다. 즉, 다른 기간의 동일한 시간대에서는 일반적으로 유사한 변동을 나타내지만 엄격하게 보면 일대일 대응은 아니다. 이를 해결하기 위해 data drift를 처리하는 데 간단한 방법을 제안한다.
 * 현재 값: $X_t$, 주기의 길이: $l$, 현재 시간의 $p$번째 주기 전에 대해서, $max(X_{t-pl-d},..., X_{t-pl-1}, X_{t-pl},X_{t-pl+1},...,X_{t-pl+d})$를 사용하여 주기적 처리를 한다.
 * second-step smoothing의 정의는 다음과 같다.
-$$
-M_{i-d}=max(F_{i-2d,i}) \\
-\ \vartriangle F_i=F_i-max(M_{i-l(p-1)},...,M_{i-dl},M_{i-l}) \\
-S_i=max(\vartriangle F_i, 0)
-$$
+$
+\begin{align}&M_{i-d}=max(F_{i-2d,i})\\ &\vartriangle F_i=F_i-max(M_{i-l(p-1)},...,M_{i-dl},M_{i-l})\\ &S_i=max(\vartriangle F_i, 0) \end{align}
+$
