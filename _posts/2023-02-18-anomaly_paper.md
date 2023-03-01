@@ -89,4 +89,5 @@ def first_smoothing(data: Series, s: int):
 * second-step smoothing의 정의는 다음과 같다.
 $\begin{align}M_{i-d}=max(F_{i-2d,i}) \\
  \vartriangle F_i=F_i-max(M_{i-l(p-1)},...,M_{i-dl},M_{i-l}) \\ 
- S_i=max(\vartriangle F_i, 0) \end{align}$
+ S_i=max(\vartriangle F_i, 0) 
+ \end{align}$
