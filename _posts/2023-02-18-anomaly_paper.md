@@ -18,7 +18,7 @@ author_profile: false
 * 지난 몇년간, 다양한 연구가 제안되었지만 label의 부족, 성능 저하, 파라미터 튜닝에 의존, 시간 부하, 재학습의 필요, cold-start issue 중 하나의 문제는 항상 있었다.
 * 선행 연구 중 SPOT이라는 모델은 extreme value를 탐지하는 데 라벨링 없이 좋은 성능을 보여줬다. 이는 대규모 시계열 데이터에서 이상 탐지를 해결할 잠재력이 있다고 판한하지만 extreme value만 탐지한다는 점에서 한계도 존재한다. 왜냐하면 실제 사례에서의 이상탐지는 전체 데이터 분포의 extreme value를 발견하는 것 뿐만 아니라 다음의 그림처럼 정상적인 패턴이 아닌 변동도 발견해야 한다.
 
-![fig1]({{site.url}}/images/2023-02-18-anomaly_paper/fig1.png)
+![fig1]({{site.url}}/images/2023-02-18-anomaly_paper/fig1.png){: width="500" height="500"}
 
 * 본 논문에서는 실시간으로 보다 효율적이고 효과적으로 이상탐지를 하는 것을 목적으로 한다. 이를 위한 핵심 아이디어는 다음과 같다.
     * **이상의 정도를 나타내기 위해 적절한 특징을 추출하고 이상치의 특징을 최대한 극단적으로 만들 수 있다면 이상치 탐지 문제는 잘 풀릴 수 있다.**
@@ -36,7 +36,7 @@ author_profile: false
 * window slice from time $i$ to $j$: $X_{i,j}=[X_i,X_{i+1},...,X_{j-1},X_j]$
 
 ## 4. Methodology
-![fig2]({{site.url}}/images/2023-02-18-anomaly_paper/fig2.png)
+![fig2]({{site.url}}/images/2023-02-18-anomaly_paper/fig2.png){: width="500" height="500"}
 ### 4.1 Fluctuation Extraction
 * 선행 연구에서는 단순 통계량을 뽑아 분석했다면 본 논문은 데이터의 변동성에 집중하여 이상치를 확인하는데 좀 더 유용하게 하고자 한다.
 * LSTM, GRU같은 딥러닝 모델들을 대신해 예측모델로 EWMA를 사용한다.
@@ -50,7 +50,7 @@ $\begin{align} E=[E_1,...,E_n] \end{align}$
 이 부분이 본 논문의 핵심이라고 할 수 있다.
 * 본 논문에서는 두단계의 feature processing 방법을 소개한다. (sequential, periodic)
 
-![fig3]({{site.url}}/images/2023-02-18-anomaly_paper/fig3.png)
+![fig3]({{site.url}}/images/2023-02-18-anomaly_paper/fig3.png){: width="500" height="500"}
 
 * 일반적으로 $E_i$는 대부분 정삼 범위에 있다. (논문에서는 local noises라고 지칭)
 * 한 주기의 다른 시간대에서는 local 변동이 다르며 다른 주기의 같은 시간대에서는 일반적으로 유사한 변동을 가진다. (논문에서는 이를 periodic pattern이라고 본다)
@@ -99,7 +99,7 @@ $\begin{align} S_i=max(\vartriangle F_i, 0) \end{align}$
 * 두번째로 이전 $p$개의 주기들을 보며 그 주기의 local maximum들의 최댓값을 현재 timestamp에서의 정상 변동의 최댓값으로 간주하기 위해 (5), (6)번 수식을 사용했다고 이해했다.
 
 first-smoothing과 second-smoothing과정을 거쳐 우리는 다음과 같은 결과를 기대할 수 있다.  
-![fig4]({{site.url}}/images/2023-02-18-anomaly_paper/fig4.png){: width="400" height="400"}
+![fig4]({{site.url}}/images/2023-02-18-anomaly_paper/fig4.png){: width="500" height="500"}
 
 코드로는 다음과 같이 짜볼 수 있을 것 같은데 자신은 없다.. (혹시 이글을 보시는 분이 계시다면 피드백주시면 너무나 감사하겠습니다..ㅎ)
 ```python
@@ -120,7 +120,7 @@ def second_smoothing(F, l, p):
 
 위의 과정들을 논문에서 sudo code로는 다음과 같이 나타냈다.
 
-![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png){: width="400" height="400"}
+![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png){: width="500" height="500"}
 
 ### 4.3 MOM-based Automatic Thresholding
 
@@ -146,5 +146,10 @@ $\begin{align} th_F=t+{\hat{\sigma} \over \hat{\gamma}}(({qn \over N_t})^{-\hat{
 
 전체적인 FluxEV의 구조는 다음과 같다.  
 
-![fig6]({{site.url}}/images/2023-02-18-anomaly_paper/fig6.png){: width="400" height="400"}
+![fig6]({{site.url}}/images/2023-02-18-anomaly_paper/fig6.png){: width="500" height="500"}
 
+## 5. Experients
+### 5.1 Datasets
+* 본 논문에서 사용하는 데이터는 KPI 데이터셋과 Yahoo 데이터셋이다.
+* 데이터셋은 anomaly에 대해 label이 되어있다.
+* 데이터셋에는 약간의 missing값이 포함되어 있다.
