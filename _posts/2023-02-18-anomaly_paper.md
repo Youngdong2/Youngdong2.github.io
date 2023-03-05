@@ -120,7 +120,7 @@ def second_smoothing(F, l, p):
 
 위의 과정들을 논문에서 sudo code로는 다음과 같이 나타냈다.
 
-![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png)
+![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png){: width="100" height="100"}
 
 ### 4.3 MOM-based Automatic Thresholding
 
