@@ -45,6 +45,7 @@ error는 현재값과 예측값을 통해 계산한다.
 $\begin{align} E=[E_1,...,E_n] \end{align}$
 
 * 이 예측값은 기대값으로도 볼 수 있기 때문에 $E_i$는 $i$시점의 local 변동성이라고 할 수 있다.
+
 ### 4.2 Two-step Smoothing Processing
 이 부분이 본 논문의 핵심이라고 할 수 있다.
 * 본 논문에서는 두단계의 feature processing 방법을 소개한다. (sequential, periodic)
@@ -92,3 +93,27 @@ $\begin{align}  M_{i-d}=max(F_{i-2d,i}) \end{align}$
 $\begin{align} \vartriangle F_i=F_i-max(M_{i-l(p-1)},...,M_{i-dl},M_{i-l}) \end{align}$
 $\begin{align} S_i=max(\vartriangle F_i, 0) \end{align}$
 
+위의 수식을 해석해보자.
+
+* 먼저 $M$이라는 array에 $F$의 local maximum을 저장한다. 즉, first smoothing 이후의 변동성을 저장한다고 이해하면 될 것 같다. 여기서 $d$는 window size의 절반을 의미하는데 직접적으로 사용하진 않고 drift를 위한 notation을 위해 표현했다고 이해했다. 즉 $M_{i-d}$는 $[F_{i-2d}, F_{i-2d+1},..., F_{i-d},..., F_{i-1}, F_i]$중 최대값을 의미한다.
+* 두번째로 이전 $p$개의 주기들을 보며 그 주기의 local maximum들의 최댓값을 현재 timestamp에서의 정상 변동의 최댓값으로 간주하기 위해 (5), (6)번 수식을 사용했다고 이해했다.
+
+first-smoothing과 second-smoothing과정을 거쳐 우리는 다음과 같은 결과를 기대할 수 있다.  
+![fig4]({{site.url}}/images/2023-02-18-anomaly_paper/fig4.png)
+
+코드로는 다음과 같이 짜볼 수 있을 것 같은데 자신은 없다.. (혹시 이글을 보시는 분이 계시다면 피드백주시면 너무나 감사하겠습니다..ㅎ)
+```python
+def second_smoothing(F, l, p):
+    S = [None] * len(F)
+    for i in range(2*l*(p-1), len(F)):
+        M = []
+        if i > 2*l*(p-1):
+            for j in range(2*l, 2*l*(p-1), l):
+                m = max(F[i-j:i])
+                M.append(m)
+
+            delta_F = F[i] - max(M)
+            S[i] = max(delta_F, 0)
+
+    return S
+```
