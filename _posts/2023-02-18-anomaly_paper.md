@@ -142,4 +142,9 @@ $\begin{align} \bar{F}_t(x)=P(X-t|X>t) \sim (1+{\gamma x\over{\sigma}})^{-{1 \ov
 $\begin{align} th_F=t+{\hat{\sigma} \over \hat{\gamma}}(({qn \over N_t})^{-\hat{\gamma}}-1)
 \end{align}$
 * $q$: 이상을 결정하는 risk 계수, $n$: 현재 관측치의 수, $N_t$: $X_i$의 개수
-* streaming pipeline동안 이러한 작업은 각 타임스탬프에서 한 번씩 업데이트 된다.
+* streaming pipeline동안 이러한 작업은 각 타임스탬프에서 한 번씩 업데이트 된다.  
+
+전체적인 FluxEV의 구조는 다음과 같다.  
+
+![fig6]({{site.url}}/images/2023-02-18-anomaly_paper/fig6.png){: width="400" height="400"}
+
