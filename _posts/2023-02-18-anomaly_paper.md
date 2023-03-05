@@ -117,3 +117,29 @@ def second_smoothing(F, l, p):
 
     return S
 ```
+
+위의 과정들을 논문에서 sudo code로는 다음과 같이 나타냈다.
+
+![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png)
+
+### 4.3 MOM-based Automatic Thresholding
+
+* 데이터를 smoothing처리를 한 후 우리는 실시간으로 이상감지를 해야한다.
+* 그러기 위해서는 데이터에 대한 threshold를 구할 수 있어야 하는데 본 논문에서는 SPOT이라는 알고리즘을 통해 threshold를 추출한다. 이 때 효율성을 더욱 향상시키기 위해 매개변수 추정 방법으로 MLE가 아닌 MOM(Method of Moments)을 활용한다.
+
+#### 4.3.1 SPOT Algorithm
+* SPOT은 streaming 버전의 Peaks Over Threshold(POT)라고 한다. POT은 모니터링 하는 데이터의 분포를 가정하는 것이 아닌 극단값의 분포를 가정한다. 
+* SPOT의 핵심은 Generalized Pareto Distribution (GPD)의 꼬리 분포를 fit하는 것이라고 할 수 있다.
+$\begin{align} \bar{F}_t(x)=P(X-t|X>t) \sim (1+{\gamma x\over{\sigma}})^{-{1 \over \gamma}}
+\end{align}$
+이제 위의 수식을 봐보자.
+* $t$ : peaks를 탐색하기 위한 초기 임계값
+* $\gamma, \sigma$ : shape, scale parameter
+* $X$는 데이터 포인트를 의미하고, $X-t$는 임계값 $t$를 넘는 부분을 나타낸다. 
+* 즉 (7) 수식은 임계값을 넘는 값 - 임계값이 GDP 분포를 따른 다는 것.
+* 오리지널 SPOT과 다르게 본 논문에서는 $\hat{\gamma}, \hat{\sigma}$를 MLE가 아닌 MOM으로 추정한다.  
+* 최종 threhold $th_F$는 다음과 같이 계산된다.
+$\begin{align} th_F=t+{\hat{\sigma} \over \hat{\gamma}}(({qn \over N_t})^{-\hat{\gamma}}-1)
+\end{align}$
+* $q$: 이상을 결정하는 risk 계수, $n$: 현재 관측치의 수, $N_t$: $X_i$의 개수
+* streaming pipeline동안 이러한 작업은 각 타임스탬프에서 한 번씩 업데이트 된다.
