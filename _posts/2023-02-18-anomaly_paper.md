@@ -148,8 +148,4 @@ $\begin{align} th_F=t+{\hat{\sigma} \over \hat{\gamma}}(({qn \over N_t})^{-\hat{
 
 ![fig6]({{site.url}}/images/2023-02-18-anomaly_paper/fig6.png){: width="500" height="500"}
 
-## 5. Experients
-### 5.1 Datasets
-* 본 논문에서 사용하는 데이터는 KPI 데이터셋과 Yahoo 데이터셋이다.
-* 데이터셋은 anomaly에 대해 label이 되어있다.
-* 데이터셋에는 약간의 missing값이 포함되어 있다.
+
