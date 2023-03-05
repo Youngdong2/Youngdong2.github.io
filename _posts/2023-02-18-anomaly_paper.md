@@ -99,7 +99,7 @@ $\begin{align} S_i=max(\vartriangle F_i, 0) \end{align}$
 * 두번째로 이전 $p$개의 주기들을 보며 그 주기의 local maximum들의 최댓값을 현재 timestamp에서의 정상 변동의 최댓값으로 간주하기 위해 (5), (6)번 수식을 사용했다고 이해했다.
 
 first-smoothing과 second-smoothing과정을 거쳐 우리는 다음과 같은 결과를 기대할 수 있다.  
-![fig4]({{site.url}}/images/2023-02-18-anomaly_paper/fig4.png)
+![fig4]({{site.url}}/images/2023-02-18-anomaly_paper/fig4.png){: width="400" height="400"}
 
 코드로는 다음과 같이 짜볼 수 있을 것 같은데 자신은 없다.. (혹시 이글을 보시는 분이 계시다면 피드백주시면 너무나 감사하겠습니다..ㅎ)
 ```python
@@ -120,7 +120,7 @@ def second_smoothing(F, l, p):
 
 위의 과정들을 논문에서 sudo code로는 다음과 같이 나타냈다.
 
-![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png){: width="300" height="300"}
+![fig5]({{site.url}}/images/2023-02-18-anomaly_paper/fig5.png){: width="400" height="400"}
 
 ### 4.3 MOM-based Automatic Thresholding
 
