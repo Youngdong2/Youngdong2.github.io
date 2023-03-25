@@ -28,6 +28,7 @@ author_profile: false
 ![fig1]({{site.url}}/images/2023-03-25-paper2/fig1.png){: width="500" height="500"}
 
 다음은 좀 더 다양한 이상치들의 종류들입니다.
+
 ![fig2]({{site.url}}/images/2023-03-25-paper2/fig2.png){: width="500" height="500"}
 
 ## 2. Classical Approaches
@@ -64,7 +65,7 @@ Time series data에 대해 anomaly detection을 수행하기 위해서는 tempor
 * **Reconstruction Error** : Reconstruction Model(AE, GAN 등)에서 정상 데이터를 재구축하는 방법을 학솝하고 실제 데이터에 대해서 알마나 잘 재구축이 가능한지를 평가하는 방법
 * **Prediction Error** : Prediction model에서 예측 값과 실제 값 가이의 차이를 평가하는 방법
 * **Dissimilarity** : 축적된 data를 통해 구축한 군집 혹인 분포에 대해 새로운 데이터가 얼마나 멀리 떨어져 있는지 평가하는 방법
-* 
+
 ![fig5]({{site.url}}/images/2023-03-25-paper2/fig5.png){: width="500" height="500"}
 
 다음은 2021년 기준 최근의 연구 방향들을 표현한 표입니다.
