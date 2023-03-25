@@ -25,11 +25,11 @@ author_profile: false
 * **Contextual Anomaly** : 정상 범위를 넘지 않으나 비정상 피턴이 관찰되는 data point 또는 sequence를 의미합니다. 이는 정상 범위를 넘지 않는 만큼 매우 탐지하기 어렵습니다.
 * **Collective Anomaly** : 시간이 지남에 따라 정상 데이터와 점진적으로 다른 패턴을 보이는 data point 또는 sequence를 의미합니다. 한 번에 검출하기 어려워 장기적인 관찰이 특히 필요한 이상치 형태입니다.
   
-![fig1]({{site.url}}/images/2023-03-25-paper2/fig1.png){: width="500" height="500"}
+![fig1]({{site.url}}/images/2023-03-25-paper2/fig1.png){: width="700" height="700"}
 
 다음은 좀 더 다양한 이상치들의 종류들입니다.
 
-![fig2]({{site.url}}/images/2023-03-25-paper2/fig2.png){: width="500" height="500"}
+![fig2]({{site.url}}/images/2023-03-25-paper2/fig2.png){: width="700" height="700"}
 
 ## 2. Classical Approaches
 위의 챕터에서는 시계열 데이터의 간략한 특징과 이상치의 종류들에 대해 알아보았습니다. 이번 챕터에서는 시계열 데이터의 고전적인 이상치 탐지 방법들에 대해 알아봅니다.
@@ -53,12 +53,12 @@ Multivariate time series data를 적절히 다루려면 매 순간 변수 사이
 
 다음은 각 방법들과 그와 관련된 모델들을 정리한 표입니다.
 
-![fig3]({{site.url}}/images/2023-03-25-paper2/fig3.png){: width="500" height="500"}
+![fig3]({{site.url}}/images/2023-03-25-paper2/fig3.png){: width="700" height="700"}
 
 ### 3.3 Modeling Temporal Context
 Time series data에 대해 anomaly detection을 수행하기 위해서는 temporal context(시간적 정보)을 모델링해야 합니다. 이 시간적 정보를 모델링하는 적절한 방법으로는 크게 RNN, CNN, RNN+CNN, Attention등이 있다고 하는데 최근에는 Transformer 계열이나 Linear모델들이 주목받고 있습니다. 본 논문에서는 크게 언급을 하고있지는 않습니다. 다음은 모델들을 정리한 표입니다.
 
-![fig4]({{site.url}}/images/2023-03-25-paper2/fig4.png){: width="500" height="500"}
+![fig4]({{site.url}}/images/2023-03-25-paper2/fig4.png){: width="700" height="700"}
 
 ### 3.4 Anomaly Criteria
 본 챕터에서는 이상치에 대한 평가를 하기 위한 전략들을 소개하고 있습니다.
@@ -66,11 +66,11 @@ Time series data에 대해 anomaly detection을 수행하기 위해서는 tempor
 * **Prediction Error** : Prediction model에서 예측 값과 실제 값 가이의 차이를 평가하는 방법
 * **Dissimilarity** : 축적된 data를 통해 구축한 군집 혹인 분포에 대해 새로운 데이터가 얼마나 멀리 떨어져 있는지 평가하는 방법
 
-![fig5]({{site.url}}/images/2023-03-25-paper2/fig5.png){: width="500" height="500"}
+![fig5]({{site.url}}/images/2023-03-25-paper2/fig5.png){: width="700" height="700"}
 
 다음은 2021년 기준 최근의 연구 방향들을 표현한 표입니다.
 
-![fig6]({{site.url}}/images/2023-03-25-paper2/fig6.png){: width="500" height="500"}
+![fig6]({{site.url}}/images/2023-03-25-paper2/fig6.png){: width="700" height="700"}
 
 ## 4. Guidelines for Practitioners
 이번 챕터에서는 실제 이상치탐지를 할 때 어떠한 전략을 세워야 하는지에 대한 가이드라인을 소개하고 있습니다.
