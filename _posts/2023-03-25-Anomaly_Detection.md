@@ -13,7 +13,7 @@ author_profile: false
 시계열 데이터는 크게 네 가지 특성이 있습니다.
 * **Temporality** : time series data는 시간적 상관관계 또는 의존성이 존재합니다.
 * **Dimensionality** : 특정 시점에 수집된 데이터는 하나 또는 여러 개의 attribute를 가집니다. (ex. Univariate, Multivariate) Univariate에서는 temporal dependency만 고려하면 되지만, Mutivariate에서는 관찰값들 사이의 상관관계도 고려해야 합니다.
-* **Nonstationary** : 데이터의 통계적 특징이 시간의 흐름에 따라 달라집니다. 즉, $F_x(x^{1+\tau},...,x^{t+\tau}) \ne F_x(x^1,...,x^t)$입니다. 이러한 특징을 갖는 데이터는 다음과 같은 종류가 있습니다.
+* **Nonstationary** : 데이터의 통계적 특징이 시간의 흐름에 따라 달라집니다. 즉, $F_x(x^{1+\tau},...,x^{t+\tau}) \ne F_x(x^1,...,x^t)$ 입니다. 이러한 특징을 갖는 데이터는 다음과 같은 종류가 있습니다.
     * Seasonality : 주기적으로 반복되는 패턴이 발생하는 특성
     * Concept Drift : 시간이 지남에 따라 데이터의 통계 분포의 변화
     * Change Points : 특정 이벤트가 발생해 데이터의 성질이 변화 (ex. 공정에서의 다른 설정으로 재시작)
