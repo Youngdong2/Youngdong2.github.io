@@ -1,8 +1,9 @@
 ---
 layout: single
 title: "[Paper Review] Deep Learning for Anomaly Detection in Time-Series Data: Review, Analysis and Guidelines"
-categories: Paper_Review
-tag: Python
+use_math: true
+comments: ture
+toc: true
 author_profile: false
 ---
 본 논문은 2021 IEEE 저널에 투고된 논문으로 딥러닝을 이용한 시계열 이상감지에 대한 풍부한 리뷰를 하고 있습니다.  
