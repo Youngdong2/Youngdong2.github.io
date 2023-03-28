@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "[Paper Review] Deep Learning for Anomaly Detection in Time-Series Data: Review, Analysis and Guidelines"
+categories: Paper_Review
 use_math: true
 comments: ture
 toc: true
