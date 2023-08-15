@@ -68,7 +68,8 @@ Potential Outcomes Framework를 만든 Rubin교수는 연구대상에 행해질 
 
 ## Fundamental Problem of Causal Inference
 
-Potential Outcomes Framework의 근본적 문제점은 Potential Outcome을 모두 관찰할 수 없다는 것입니다. 결국 가능한 것은 treatment를 받은 outcome과 treatment를 받지 않은 outcome을 비교하는 것입니다. treatment를 받지 않은 그룹을 Control group라고 부릅니다.
+Potential Outcomes Framework의 근본적 문제점은 Potential Outcome을 모두 관찰할 수 없다는 것입니다. 결국 가능한 것은 treatment를 받은 outcome과 treatment를 받지 않은 outcome을 비교하는 것입니다. treatment를 받지 않은 그룹을 Control group라고 부릅니다.  
+
 ![fig2]({{site.url}}/images/causal_inference/session1-2.png "출처 : 인과추론의 데이터과학"){: width="700" height="700"}
 
 ## Selection Bias
@@ -78,5 +79,6 @@ Counterfactual과 control group의 차이를 selection bias라고 합니다. 즉
 
 ## Causal Mindset
 
-위에서 말했다싶이 Selection Bias를 줄이는 것이 가장 중요합니다. 즉, Counterfactual에 최대한 가까운 Control Group를 찾을 수 있는 적절한 연구디자인을 고안하는 것이 핵심 목표입니다. 이러한 목표를 `Ceteris Paribus`라고 부릅니다.
+위에서 말했다싶이 Selection Bias를 줄이는 것이 가장 중요합니다. 즉, Counterfactual에 최대한 가까운 Control Group를 찾을 수 있는 적절한 연구디자인을 고안하는 것이 핵심 목표입니다. 이러한 목표를 `Ceteris Paribus`라고 부릅니다.  
+
 ![fig3]({{site.url}}/images/causal_inference/session1-3.png "출처 : 인과추론의 데이터과학"){: width="500" height="500"}
