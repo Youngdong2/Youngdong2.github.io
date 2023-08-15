@@ -48,3 +48,23 @@ Design-Based Approach는 어떤 요인들이 인과구조를 그리는 데 있�
 
 # Potential Outcomes Framework
 ## Design-Based Approach to Causation
+Potential Outcomes Framework를 만든 Rubin교수는 연구대상에 행해질 수 있는 구체적인 treatment를 정의할 수 없다면, 그것에 대한 인과적 효과도 정의할 수 없다고 주장합니다.  
+이런 측면에서는 research design이 중요합니다. 즉, 인과추론을 하기위해 중요한 것은 빅데이터나 복잡한 통계모형이 아닌 데이터를 모으기 전에 연구자가 얼마나 적절한 `연구 디자인`을 고안했는지의 여부입니다.
+
+## Potential Outcomes Framework
+특정 treatment의 인과적 효과에 대한 점재적 결과의 차이로 정의하는 관점을 Potential Outcomes Framework라고 합니다.  
+예를 들어, 독서가 성적에 미치는 인과적인 효과를 알아보기 위해 실제 책을 읽었을 때 성적과 만약 그때 책을 읽지 않았을 때의 잠재적 성적과의 차이를 통해 인과적 효과를 정량화할 수 있습니다.  
+즉, treatment의 인과적 효과 = tratment를 받았을 때의 결과 - 받지 않았을 때의 잠재적 결과(Counterfactual)라고 정리할 수 있습니다.
+
+## Fundamental Problem of Causal Inference
+Potential Outcomes Framework의 근본적 문제점은 Potential Outcome을 모두 관찰할 수 없다는 것입니다. 결국 가능한 것은 treatment를 받은 outcome과 treatment를 받지 않은 outcome을 비교하는 것입니다. treatment를 받지 않은 그룹을 Control group라고 부릅니다.
+![fig2]({{site.url}}/images/causal_inference/session1-2.png "출처 : 인과추론의 데이터과학"){: width="700" height="700"}
+
+## Selection Bias
+인과추론을 위해 실제로 필요한 것은 counterfactual이지만 이는 현실적으로 관찰할 수 없습니다. 우리가 현실에서 가지고 있는 데이터는 control group밖에 없죠. 인과추론이 어려운 원인은 이 counterfactual과 control group의 차이때문이고, 이를 해결하기 위해서는 control group을 최대한 counterfactual과 가깝게 해야합니다. 
+Counterfactual과 control group의 차이를 selection bias라고 합니다. 즉, selection bias을 작게 만들어야 하는것이 목표입니다.
+
+## Causal Mindset
+위에서 말했다싶이 Selection Bias를 줄이는 것이 가장 중요합니다. 즉, Counterfactual에 최대한 가까운 Control Group를 찾을 수 있는 적절한 연구디자인을 고안하는 것이 핵심 목표입니다. 이러한 목표를 `Ceteris Paribus`라고 부릅니다.
+![fig3]({{site.url}}/images/causal_inference/session1-3.png "출처 : 인과추론의 데이터과학"){: width="500" height="500"}
+
