@@ -14,13 +14,13 @@ AIOps에서 중요한 부분 중 하나는 장애에 대한 원인이 무엇인�
 
 이번 포스팅부터 시작하여 [인과추론의 데이터과학](https://youtube.com/playlist?list=PLKKkeayRo4PWyV8Gr-RcbWcis26ltIyMN)을 정리하는 글을 써보려고 합니다.
 
-# 인과추론의 다양한 접근법
+## Session 1.1 인과추론의 다양한 접근법
 
-## Frameworks for Causation
+### Frameworks for Causation
 
 인과관계에 대해 모든 사람들이 동일하게 이해하고 동일한 방식으로 검증할 수 있는 수단이 필요합니다. 그런 역할을 하는 것이 인과관계에 대한 framework입니다.(공통의 이해에 대한 틀)
 
-## Various Approaches to Causation
+### Various Approaches to Causation
 
 인과관계에 대한 다양한 접근 방법을 소개합니다.
 
@@ -53,32 +53,32 @@ AIOps에서 중요한 부분 중 하나는 장애에 대한 원인이 무엇인�
 위 이미지에서 볼 수 있듯이 Statistics-Based Approach는 인과추론에 대한 이론적 기반을 제공할 수 있고, Design-Based Approach와 Structure-Based Approach는 데이터분석의 전력을 고안해줄 수 있습니다.  
 Design-Based Approach는 어떤 요인들이 인과구조를 그리는 데 있어 포함이 되어야 하는지에 대한 인사이트를 줄 수 있고, 반대로 인과구조에 대한 이해는 연구 디자인을 고안하는 데 있어 중요한 인사이트를 줄 수 있습니다. 즉, 인과추론에 있어 완벽한 feramework는 없고, 각각이 서로 상오보완적으로 작동할 수 밖에 없죠. 때문에 서로 다른 접근 방법에 대해 충분히 이해해야 혹, 연구 목적에 맞는 적절한 framework와 상응하는 적절한 데이터를 수집하고 그에 맞는 적절한 분석방법론을 채택하는 것이 중요합니다.
 
-# Potential Outcomes Framework
+## Session1.2 Potential Outcomes Framework
 
-## Design-Based Approach to Causation
+### Design-Based Approach to Causation
 
 Potential Outcomes Framework를 만든 Rubin교수는 연구대상에 행해질 수 있는 구체적인 treatment를 정의할 수 없다면, 그것에 대한 인과적 효과도 정의할 수 없다고 주장합니다.  
 이런 측면에서는 research design이 중요합니다. 즉, 인과추론을 하기위해 중요한 것은 빅데이터나 복잡한 통계모형이 아닌 데이터를 모으기 전에 연구자가 얼마나 적절한 `연구 디자인`을 고안했는지의 여부입니다.
 
-## Potential Outcomes Framework
+### Potential Outcomes Framework
 
 특정 treatment의 인과적 효과에 대한 점재적 결과의 차이로 정의하는 관점을 Potential Outcomes Framework라고 합니다.  
 예를 들어, 독서가 성적에 미치는 인과적인 효과를 알아보기 위해 실제 책을 읽었을 때 성적과 만약 그때 책을 읽지 않았을 때의 잠재적 성적과의 차이를 통해 인과적 효과를 정량화할 수 있습니다.  
 즉, treatment의 인과적 효과 = tratment를 받았을 때의 결과 - 받지 않았을 때의 잠재적 결과(Counterfactual)라고 정리할 수 있습니다.
 
-## Fundamental Problem of Causal Inference
+### Fundamental Problem of Causal Inference
 
 Potential Outcomes Framework의 근본적 문제점은 Potential Outcome을 모두 관찰할 수 없다는 것입니다. 결국 가능한 것은 treatment를 받은 outcome과 treatment를 받지 않은 outcome을 비교하는 것입니다. treatment를 받지 않은 그룹을 Control group라고 부릅니다.  
 
 ![fig2]({{site.url}}/images/causal_inference/session1-2.png "출처 : 인과추론의 데이터과학"){: width="700" height="700"}
 
-## Selection Bias
+### Selection Bias
 
 인과추론을 위해 실제로 필요한 것은 counterfactual이지만 이는 현실적으로 관찰할 수 없습니다. 우리가 현실에서 가지고 있는 데이터는 control group밖에 없죠. 인과추론이 어려운 원인은 이 counterfactual과 control group의 차이때문이고, 이를 해결하기 위해서는 control group을 최대한 counterfactual과 가깝게 해야합니다.
 Counterfactual과 control group의 차이를 selection bias라고 합니다. 즉, selection bias을 작게 만들어야 하는것이 목표입니다.
 
-## Causal Mindset
+### Causal Mindset
 
-위에서 말했다싶이 Selection Bias를 줄이는 것이 가장 중요합니다. 즉, Counterfactual에 최대한 가까운 Control Group를 찾을 수 있는 적절한 연구디자인을 고안하는 것이 핵심 목표입니다. 이러한 목표를 `Ceteris Paribus`라고 부릅니다.  
+위에서 언급한 것과 같이  Selection Bias를 줄이는 것이 가장 중요합니다. 즉, Counterfactual에 최대한 가까운 Control Group를 찾을 수 있는 적절한 연구디자인을 고안하는 것이 핵심 목표입니다. 이러한 목표를 `Ceteris Paribus`라고 부릅니다.  
 
 ![fig3]({{site.url}}/images/causal_inference/session1-3.png "출처 : 인과추론의 데이터과학"){: width="500" height="500"}
