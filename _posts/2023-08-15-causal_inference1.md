@@ -82,3 +82,7 @@ Counterfactual과 control group의 차이를 selection bias라고 합니다. 즉
 위에서 언급한 것과 같이  Selection Bias를 줄이는 것이 가장 중요합니다. 즉, Counterfactual에 최대한 가까운 Control Group를 찾을 수 있는 적절한 연구디자인을 고안하는 것이 핵심 목표입니다. 이러한 목표를 `Ceteris Paribus`라고 부릅니다.  
 
 ![fig3]({{site.url}}/images/causal_inference/session1-3.png "출처 : 인과추론의 데이터과학"){: width="500" height="500"}
+
+## Reference
+
+[인과추론의 데이터과학](https://youtube.com/playlist?list=PLKKkeayRo4PWyV8Gr-RcbWcis26ltIyMN)

@@ -127,3 +127,7 @@ Matching Technique은 비교가능한 control 그룹을 찾을 수 없을 때 �
 Regression Discontinuity (RD)는 running variable의 모델링이 핵심입니다. 즉, 모델링에 민감한 방법이죠.  
 RD는 discontinuous jump를 활용합니다. discontinuous jump가 없을 때의 상황을 모델링해서 counterfactual을 계산합니다. 즉, counterfactual과 실제 값과의 차이를 바탕으로 treatment effect를 구하는 것입니다.
 
+## Reference
+
+[인과추론의 데이터과학](https://youtube.com/playlist?list=PLKKkeayRo4PWyV8Gr-RcbWcis26ltIyMN)
+
