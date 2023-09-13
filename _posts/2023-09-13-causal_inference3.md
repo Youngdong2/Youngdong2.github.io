@@ -27,14 +27,14 @@ Directed Acyclic Graph(DAG)란 변수들간의 영향을 화살표로 표현하�
 다음으로 DAG에서 relationship 종류에 대해 알아보겠습니다.
 
 * 직접적인 원인 (Direct Causal Effect)
-![fig1]({{site.url}}/images/causal_inference/session7-2.png "출처 : 인과추론의 데이터과학"){: width="300" height="300"}
+![fig1]({{site.url}}/images/causal_inference/session7-2.png "출처 : 인과추론의 데이터과학"){: width="100" height="100"}
 
 * 간접적인 원인 (Indirect Causal Effect)
-![fig1]({{site.url}}/images/causal_inference/session7-3.png "출처 : 인과추론의 데이터과학"){: width="300" height="300"}
+![fig1]({{site.url}}/images/causal_inference/session7-3.png "출처 : 인과추론의 데이터과학"){: width="100" height="100"}
 
 * 교란 요인 (Fork)
-![fig1]({{site.url}}/images/causal_inference/session7-4.png "출처 : 인과추론의 데이터과학"){: width="300" height="300"}
+![fig1]({{site.url}}/images/causal_inference/session7-4.png "출처 : 인과추론의 데이터과학"){: width="100" height="100"}
 
 * 충돌체 (Collider)
-![fig1]({{site.url}}/images/causal_inference/session7-5.png "출처 : 인과추론의 데이터과학"){: width="300" height="300"}
+![fig1]({{site.url}}/images/causal_inference/session7-5.png "출처 : 인과추론의 데이터과학"){: width="100" height="100"}
 
