@@ -130,4 +130,3 @@ RD는 discontinuous jump를 활용합니다. discontinuous jump가 없을 때의
 ## Reference
 
 [인과추론의 데이터과학](https://youtube.com/playlist?list=PLKKkeayRo4PWyV8Gr-RcbWcis26ltIyMN)
-
