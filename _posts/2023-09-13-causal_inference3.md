@@ -38,3 +38,7 @@ Directed Acyclic Graph(DAG)란 변수들간의 영향을 화살표로 표현하�
 * 충돌체 (Collider)
 ![fig1]({{site.url}}/images/causal_inference/session7-5.png "출처 : 인과추론의 데이터과학"){: width="100" height="100"}
 
+여기서 직접적인 원인과 간접적인 요인은 직관적으로 이해할 수 있지만, 교란 요인과 충돌체는 그러지 않습니다. 뒤에서 좀 더 구체적으로 설명해보도록 하고 일단 넘어가보겠습니다.
+
+### Association in Causal Diagram
+
