@@ -41,8 +41,6 @@ Directed Acyclic Graph(DAG)란 변수들간의 영향을 화살표로 표현하�
 여기서 직접적인 원인과 간접적인 요인은 직관적으로 이해할 수 있지만, 교란 요인과 충돌체는 그러지 않습니다. 뒤에서 좀 더 구체적으로 설명해보도록 하고 일단 넘어가보겠습니다.
 
 ### Association in Causal Diagram
-<<<<<<< Updated upstream
-=======
 
 DAG를 통해 그래프를 그리면 상관관계(또는 Association)을 쉽게 파악할 수 있습니다. 또, 아래 그림과 같이 다양한 Association에 대해 분석할 수 있다는 것이 장점입니다.  
 
@@ -60,4 +58,3 @@ causal diagram에서 원인변수 X와 변수 Y사이에 정보 흐름이 없다
  아래 그림은 정보를 차단했을 때 정보의 흐름을 나타냅니다. 마지막 Collider를 보면 Z가 차단되었을 때 정보가 튕겨나와 d-connected가 됩니다.
 
  ![fig1]({{site.url}}/images/causal_inference/session7-8.png "출처 : 인과추론의 데이터과학"){: width="700" height="700"}
->>>>>>> Stashed changes
