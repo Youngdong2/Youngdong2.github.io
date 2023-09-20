@@ -41,3 +41,20 @@ Directed Acyclic Graph(DAG)란 변수들간의 영향을 화살표로 표현하�
 여기서 직접적인 원인과 간접적인 요인은 직관적으로 이해할 수 있지만, 교란 요인과 충돌체는 그러지 않습니다. 뒤에서 좀 더 구체적으로 설명해보도록 하고 일단 넘어가보겠습니다.
 
 ### Association in Causal Diagram
+
+DAG를 통해 그래프를 그리면 상관관계(또는 Association)을 쉽게 파악할 수 있습니다. 또, 아래 그림과 같이 다양한 Association에 대해 분석할 수 있다는 것이 장점입니다.  
+
+![fig1]({{site.url}}/images/causal_inference/session7-6.png "출처 : 인과추론의 데이터과학"){: width="500" height="500"}
+
+위 그림에서 X가 원인, Y가 결과라고 했을 때 direct causal effect와 indirect causal effect를 제외한 모든 path를 **backdoor path**라고 합니다. 즉, X $\to$ W $\to$ Y를 제외한 모든 path들은 backdoor path입니다.  
+
+이러한 의미로 봤을 때 이러한 causal diagram에서 인과관계를 추론한다의 의미는 모든 backdoor path를 차단한다와 같습니다.  
+
+다음으로는 강의에서 용어에 대한 설명을 했습니다.  
+causal diagram에서 원인변수 X와 변수 Y사이에 정보 흐름이 없다면 **d-separated**라고 합니다. 그 반대는 **d-connected**라고 합니다. 아래 예시에서 X와 Y는 d-connected입니다. 정보의 흐름을 차단하는 것을 controlling for 또는 conditioning on이라고 표현하는데, A가 conditioning되었다면 X와 Y는 d-separated됨을 확인할 수 있습니다. A,B도 마찬가지겠죠. 하지만 C를 차단했을 때는 위의 경로가 열려있기 때문에 d-connected입니다. C,E를 차단했을 때도 마찬가지 입니다. 주의할 점은 A, D를 차단했을 때 d-connected라는 것입니다. 이는 collider의 개념때문입니다.  
+
+![fig1]({{site.url}}/images/causal_inference/session7-7.png "출처 : 인과추론의 데이터과학"){: width="500" height="500"}
+
+ 아래 그림은 정보를 차단했을 때 정보의 흐름을 나타냅니다. 마지막 Collider를 보면 Z가 차단되었을 때 정보가 튕겨나와 d-connected가 됩니다.
+
+ ![fig1]({{site.url}}/images/causal_inference/session7-8.png "출처 : 인과추론의 데이터과학"){: width="700" height="700"}
