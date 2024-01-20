@@ -15,7 +15,7 @@ author_profile: false
 다음과 같은 화면을 보신적 있으신가요?
 
 <p align="center">
-  <img src="/images/로그이상감지/Syslog-messages.jpg" height="400px" width="400px">
+  <img src="/images/로그이상감지/log.png" height="600px" width="600px">
 </p>
 
 소프트웨어 로그는 소프트웨어 개발자가 유지 관리 목적으로 설계한 시스템 내 프로세스에 대한 런타임 정보의 기록입니다.  
@@ -56,7 +56,7 @@ author_profile: false
 로그 이상감지는 보통 아래 그림과 같은 과정으로 구성되어 있습니다.  
 
 <p align="center">
-  <img src="/images/로그이상감지/log-workflow.png" height="400px" width="400px">
+  <img src="/images/로그이상감지/log-workflow.png" height="600px" width="600px">
 </p>
 
 IT 운영 프로세스에서 생성되는 로그는 굉장히 복잡합니다. 이 로그를 의미있게 분석하여 이상을 탐지하려면 일련의 과정이 필요합니다.  
