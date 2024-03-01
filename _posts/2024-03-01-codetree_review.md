@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "코딩테스트 준비. 코드트리로 정착!"
-categories: 회고
+categories: etc
 use_math: false
 comments: true
 toc: true
