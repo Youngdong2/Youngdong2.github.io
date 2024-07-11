@@ -201,13 +201,22 @@ incremental: false
 # Markdown Processing
 kramdown:
   input: GFM
-  hard_wrap: false
-  auto_ids: true
-  footnote_nr: 1
-  entity_output: as_char
-  toc_levels: 1..6
-  smart_quotes: lsquo,rsquo,ldquo,rdquo
-  enable_coderay: false
+  math_engine: mathjax
+  syntax_highlighter_opts:
+    block:
+      html_wrapper: "<div class=\"highlight\"><pre class=\"highlight\"><code class=\"language-%language%\" data-lang=\"%language%\">"
+      default_lang: "plaintext"
+mathjax:
+  version: "2.7.5"
+  config: "TeX-AMS-MML_HTMLorMML"
+  # input: GFM
+  # hard_wrap: false
+  # auto_ids: true
+  # footnote_nr: 1
+  # entity_output: as_char
+  # toc_levels: 1..6
+  # smart_quotes: lsquo,rsquo,ldquo,rdquo
+  # enable_coderay: false
 
 
 # Sass/SCSS
