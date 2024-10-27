@@ -160,3 +160,355 @@ Goodbye!
 ```
 
 ## Part 2: Enhancing the Chatbot with Tools
+
+이번에는 웹 검색 도구를 통합하여 답변을 개선하는 방법을 알아봅시다.
+
+시작하기 전에 필요한 패키지를 설치하고 API 키를 설정해야 합니다. 튜토리얼에서는 Tavily 검색 엔진을 사용합니다.
+
+```python
+%%capture --no-stderr
+%pip install -U tavily-python langchain_community
+
+_set_env("TAVILY_API_KEY")
+```
+
+### 1. Tool 정의
+
+Tavily 검색 도구를 정의하여, 챗봇이 'LangGraph의 노드가 무엇인가요?'와 같은 질문에 웹 검색을 통해 답변을 찾을 수 있도록 합니다.
+
+```python
+from langchain_community.tools.tavily_search import TavilySearchResults
+
+tool = TavilySearchResults(max_results=2)
+tools = [tool]
+tool.invoke("What's a 'node' in LangGraph?")
+```
+
+이때, Tavily 검색 도구는 페이지 요약 정보를 반환하여 챗봇이 사용할 수 있습니다.
+
+### 2. StateGraph 및 LLM 초기화
+
+기본적인 StateGraph 생성 코드는 part1과 유사하지만, **bind_tools** 메서드를 사용하여 LLM이 JSON 형식으로 검색 엔진을 호출할 수 있도록 합니다.
+
+```python
+from typing import Annotated
+
+from langchain_anthropic import ChatAnthropic
+from typing_extensions import TypedDict
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+
+graph_builder = StateGraph(State)
+
+
+llm = ChatAnthropic(model="claude-3-5-sonnet-20240620")
+# Modification: tell the LLM which tools it can call
+llm_with_tools = llm.bind_tools(tools)
+
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+
+graph_builder.add_node("chatbot", chatbot)
+```
+
+이렇게 하면 LLM이 적절한 JSON 형식으로 도구를 호출할 수 있습니다.
+
+### 3. Tool 실행 노드 추가
+
+Tool이 호출될 경우 이를 실행하는 **BasicToolNode** 클래스를 정의합니다. 이 노드는 최근 메시지에서 `tool_calls`가 포함된 경우 tool을 호출합니다.
+
+```python
+import json
+
+from langchain_core.messages import ToolMessage
+
+
+class BasicToolNode:
+    """AIMesage의 마지막 메시지에 포함된 도구 요청을 실행하는 노드."""
+
+    def __init__(self, tools: list) -> None:
+        self.tools_by_name = {tool.name: tool for tool in tools}
+
+    def __call__(self, inputs: dict):
+        if messages := inputs.get("messages", []):
+            message = messages[-1]
+        else:
+            raise ValueError("No message found in input")
+        outputs = []
+        for tool_call in message.tool_calls:
+            tool_result = self.tools_by_name[tool_call["name"]].invoke(
+                tool_call["args"]
+            )
+            outputs.append(
+                ToolMessage(
+                    content=json.dumps(tool_result),
+                    name=tool_call["name"],
+                    tool_call_id=tool_call["id"],
+                )
+            )
+        return {"messages": outputs}
+
+
+tool_node = BasicToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+```
+
+위의 `BasicToolNode`는 메시지에서 `tool_calls`가 있는지확인하여 도구를 호출하고 결과를 반환합니다.
+
+### 4. 조건부 엣지 설정
+
+조건부 엣지는 특정 조건에 따라 노드 간 흐름을 제어합니다. 여기서는 **route_tools** 함수로 `tool_calls`가 있는지 확인하고, 있느면 `tools`로, 없으면 `END`로 이동합니다.
+
+```python
+from typing import Literal
+
+
+def route_tools(
+    state: State,
+):
+    """
+    Use in the conditional_edge to route to the ToolNode if the last message
+    has tool calls. Otherwise, route to the end.
+    """
+    if isinstance(state, list):
+        ai_message = state[-1]
+    elif messages := state.get("messages", []):
+        ai_message = messages[-1]
+    else:
+        raise ValueError(f"No messages found in input state to tool_edge: {state}")
+    if hasattr(ai_message, "tool_calls") and len(ai_message.tool_calls) > 0:
+        return "tools"
+    return END
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    route_tools,
+    {"tools": "tools", END: END},
+)
+# Any time a tool is called, we return to the chatbot to decide the next step
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+graph = graph_builder.compile()
+```
+
+이제 `chatbot` 노드가 실행될 때마다 `tool_calls`가 있으면 `tools`로, 그렇지 않으면 `END`로 이동하도록 합니다.
+
+#### 5. 그래프 시각화 및 실행
+
+```python
+
+from IPython.display import Image, display
+
+try:
+    display(Image(graph.get_graph().draw_mermaid_png()))
+except Exception:
+    # This requires some extra dependencies and is optional
+    pass
+```
+
+<p align="center">
+  <img src="/images/langgraph/langgraph2.jpeg" height="200px" width="150px">
+</p>
+
+이제 챗봇은 학습 데이터 외부의 질문에 답변할 수 있으며, 사용자 입력에 따라 Tavily 검색 엔진을 통해 정보를 찾고 제공합니다.
+
+```python
+while True:
+    try:
+        user_input = input("User: ")
+        if user_input.lower() in ["quit", "exit", "q"]:
+            print("Goodbye!")
+            break
+
+        stream_graph_updates(user_input)
+    except:
+        # fallback if input() is not available
+        user_input = "What do you know about LangGraph?"
+        print("User: " + user_input)
+        stream_graph_updates(user_input)
+        break
+```
+
+예시 응답:
+
+```css
+Assistant: [{"url": "https://www.langchain.com/langgraph", "content": "LangGraph는 복잡한 AI 작업을 수행하는 데 도움이 되는 라이브러리입니다..."}]
+```
+
+## Part3: Adding Memory to the Chatbot
+
+Part2까지의 과정을 통해 챗봇이 tool을 활용하여 질문에 답할 수 있지만, 이전 대화 맥락을 기억하지는 못합니다.
+이는 멀티턴 대화의 연속성을 유지하는 데 한계가 있습니다. **LangGraph**는 지속적인 체크포인트 시스템을 통해 이 문제를 해결합니다.
+
+### LangGraph의 Checkpointing 시스템
+
+LangGraph에서 체크포인터와 `thread_id`를 지정해 그래프를 컴파일하면, 그래프는 각 단계 후 상태를 자동으로 저장합니다. 동일한 `thred_id`로 다시 호출하면 저장된 상태가 로드되어 챗봇이 이전 대화에서 이어갈 수 있습니다.
+
+> **Note**: 
+> Checkpoing은 단순한 메모리 이상의 기능을 제공합니다. 이는 에러 복구, human-in-the-loop 워크플로우, time travel interactions 등을 가능하게 합니다. 먼저 멀티턴 대화를 위한 체크포인트를 추가해 보겠습니다.
+
+### 1. 메모리 saver 생성
+
+먼저 **MemorySaver** 체크포인터를 생성합니다.
+
+```python
+from langgraph.checkpoint.memory import MemorySaver
+
+memory = MemorySaver()
+```
+
+이 체크포인터는 메모리에 데이터를 저장합니다. 실제 운영 환경에서는 SQLite나 PostgreSQL과 같은 DB에 연결할 수 있는 **SqliteSaver**나 **PostgresSaver**를 사용할 수 잇습니다.
+
+### 2. 그래프 정의 및 컴파일
+
+기존의 **BasicToolNode** 대신 LangGraph의 **ToolNode**와 **tools_condition**을 사용하여 더 효율적은 API 설행을 구성합니다. 나머지 코드 구조는 part2와 유사합니다.
+
+```python
+from typing import Annotated
+
+from langchain_anthropic import ChatAnthropic
+from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_core.messages import BaseMessage
+from typing_extensions import TypedDict
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+
+graph_builder = StateGraph(State)
+
+
+tool = TavilySearchResults(max_results=2)
+tools = [tool]
+llm = ChatAnthropic(model="claude-3-5-sonnet-20240620")
+llm_with_tools = llm.bind_tools(tools)
+
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+# Any time a tool is called, we return to the chatbot to decide the next step
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+```
+
+이제 체크포인터와 함께 그래프를 컴파일합니다.
+
+```python
+graph = graph_builder.compile(checkpointer=memory)
+```
+
+### 3. 챗봇과 상호작용
+
+각 대화의 **thread_id**를 통해 챗봇이 대화 맥락을 기억하게 됩니다.
+
+```python
+config = {"configurable": {"thread_id": "1"}}
+```
+
+다음과 같이 챗봇을 호출해봅시다.
+
+```python
+user_input = "Hi there! My name is Will."
+
+# The config is the **second positional argument** to stream() or invoke()!
+events = graph.stream(
+    {"messages": [("user", user_input)]}, config, stream_mode="values"
+)
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+응답 예:
+
+```text
+================================ Human Message =================================
+Hi there! My name is Will.
+================================= Ai Message ===================================
+Hello Will! It's nice to meet you. How can I assist you today?
+
+```
+
+이제 이름을 기억하는지 확인합니다.
+
+```python
+user_input = "Remember my name?"
+
+# The config is the **second positional argument** to stream() or invoke()!
+events = graph.stream(
+    {"messages": [("user", user_input)]}, config, stream_mode="values"
+)
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+```text
+================================ Human Message =================================
+Remember my name?
+================================= Ai Message ===================================
+Of course, I remember your name, Will. Is there anything else you'd like to talk about?
+```
+
+> **Note**:
+> 메모리는 LangGraph의 체크포인터로 처리되므로, 외부 리스트나 추가 메모리가 필요하지 않습니다.
+
+새로운 `thread_id`로 호출하면 챗봇은 초기 상태로 돌아갑니다.
+
+```python
+# The only difference is we change the `thread_id` here to "2" instead of "1"
+events = graph.stream(
+    {"messages": [("user", user_input)]},
+    {"configurable": {"thread_id": "2"}},
+    stream_mode="values",
+)
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+```text
+================================ Human Message =================================
+Remember my name?
+================================= Ai Message ===================================
+I apologize, but I don't have any previous context or memory of your name. Could you please tell me your name?
+```
+
+단순히 `thread_id`만 변경했음에도 챗봇은 새로운 대화로 인식합니다.
+
+### 상태 스냅샷 검사하기
+
+**get_state** 메서드를 통해 현재 상태를 확인할 수 있습니다.
+
+```python
+snapshot = graph.get_state(config)
+snapshot
+```
+
+```text
+StateSnapshot(values={'messages': [HumanMessage(content='Hi there! My name is Will.', additional_kwargs={}, response_metadata={}, id='8c1ca919-c553-4ebf-95d4-b59a2d61e078'), AIMessage(content="Hello Will! It's nice to meet you. How can I assist you today? Is there anything specific you'd like to know or discuss?", additional_kwargs={}, response_metadata={'id': 'msg_01WTQebPhNwmMrmmWojJ9KXJ', 'model': 'claude-3-5-sonnet-20240620', 'stop_reason': 'end_turn', 'stop_sequence': None, 'usage': {'input_tokens': 405, 'output_tokens': 32}}, id='run-58587b77-8c82-41e6-8a90-d62c444a261d-0', usage_metadata={'input_tokens': 405, 'output_tokens': 32, 'total_tokens': 437}), HumanMessage(content='Remember my name?', additional_kwargs={}, response_metadata={}, id='daba7df6-ad75-4d6b-8057-745881cea1ca'), AIMessage(content="Of course, I remember your name, Will. I always try to pay attention to important details that users share with me. Is there anything else you'd like to talk about or any questions you have? I'm here to help with a wide range of topics or tasks.", additional_kwargs={}, response_metadata={'id': 'msg_01E41KitY74HpENRgXx94vag', 'model': 'claude-3-5-sonnet-20240620', 'stop_reason': 'end_turn', 'stop_sequence': None, 'usage': {'input_tokens': 444, 'output_tokens': 58}}, id='run-ffeaae5c-4d2d-4ddb-bd59-5d5cbf2a5af8-0', usage_metadata={'input_tokens': 444, 'output_tokens': 58, 'total_tokens': 502})]}, next=(), config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1ef7d06e-93e0-6acc-8004-f2ac846575d2'}}, metadata={'source': 'loop', 'writes': {'chatbot': {'messages': [AIMessage(content="Of course, I remember your name, Will. I always try to pay attention to important details that users share with me. Is there anything else you'd like to talk about or any questions you have? I'm here to help with a wide range of topics or tasks.", additional_kwargs={}, response_metadata={'id': 'msg_01E41KitY74HpENRgXx94vag', 'model': 'claude-3-5-sonnet-20240620', 'stop_reason': 'end_turn', 'stop_sequence': None, 'usage': {'input_tokens': 444, 'output_tokens': 58}}, id='run-ffeaae5c-4d2d-4ddb-bd59-5d5cbf2a5af8-0', usage_metadata={'input_tokens': 444, 'output_tokens': 58, 'total_tokens': 502})]}}, 'step': 4, 'parents': {}}, created_at='2024-09-27T19:30:10.820758+00:00', parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1ef7d06e-859f-6206-8003-e1bd3c264b8f'}}, tasks=())
+```
+
+이 스냅샷에는 현재 상태, 해당 설정, 다음 처리 노드가 포함됩니다. 이 예시에서는 그래프가 `END`상태에 도달했으므로 `next`는 비어있습니다.
+
