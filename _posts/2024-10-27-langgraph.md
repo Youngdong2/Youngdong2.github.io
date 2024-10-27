@@ -8,7 +8,7 @@ toc: true
 author_profile: false
 ---
 
-이번 포스팅에서는 최근 관심이 높아진 LangGraph 튜토리얼에 대해 정리해보겠습니다. 이 포스팅은 공식 튜토리얼 문서를 참고했습니다.
+이번 포스팅에서는 최근 관심이 높아진 LangGraph 튜토리얼에 대해 정리해보겠습니다. 이 포스팅은 [공식 튜토리얼 문서](https://langchain-ai.github.io/langgraph/tutorials/introduction/)를 참고했습니다.
 
 목차는 다음과 같습니다.
 
@@ -512,3 +512,135 @@ StateSnapshot(values={'messages': [HumanMessage(content='Hi there! My name is Wi
 
 이 스냅샷에는 현재 상태, 해당 설정, 다음 처리 노드가 포함됩니다. 이 예시에서는 그래프가 `END`상태에 도달했으므로 `next`는 비어있습니다.
 
+## Part4: Human-in-the-loop
+
+Agent가 모든 작업을 신뢰할 수 있는 방식으로 수행하지 못할 때는 인간의 검토나 입력이 필요할 수 있습니다.
+LangGraph는 **interrupt_before** 기능을 통해 특정 노드에서 작업을 일시중지하고, 인간이 검토하거나 승인한 후에만 작업을 진행할 수 있게 합니다.
+
+이번 파트에서는 **tool** 노드 실행 전마다 작업을 중단하도록 설정하여 인간 검토가 필요할 때 개입할 수 있는 구조를 만들어보겠습니다.
+
+### 1. 기존 코드 불러오기
+
+이 섹션의 코드는 part 3의 설정을 기반으로 합니다.
+
+```python
+from typing import Annotated
+
+from langchain_anthropic import ChatAnthropic
+from langchain_community.tools.tavily_search import TavilySearchResults
+from typing_extensions import TypedDict
+
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import StateGraph, START
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+
+memory = MemorySaver()
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+
+graph_builder = StateGraph(State)
+
+tool = TavilySearchResults(max_results=2)
+tools = [tool]
+llm = ChatAnthropic(model="claude-3-5-sonnet-20240620")
+llm_with_tools = llm.bind_tools(tools)
+
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+```
+
+### 2. 그래프 컴파일 및 중단 지점 설정
+
+**interrupt_before** 인수를 통해 `tools`노드 실행 전 작업을 중단하도록 지정합니다. 이를 통해 인간 검토 후 작업을 재개할 수 있습니다.
+
+```python
+graph = graph_builder.compile(
+    checkpointer=memory,
+    # This is new!
+    interrupt_before=["tools"],
+)
+```
+
+### 3. 챗봇과 상호작용 및 검토
+
+아래 코드는 챗봇에 입력을 전달하고, 중단 지점에서 상태를 확인하는 방법을 보여줍니다.
+
+```python
+user_input = "I'm learning LangGraph. Could you do some research on it for me?"
+config = {"configurable": {"thread_id": "1"}}
+
+events = graph.stream(
+    {"messages": [("user", user_input)]}, config, stream_mode="values"
+)
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+출력 예:
+
+```test
+================================[1m Human Message [0m=================================
+
+I'm learning LangGraph. Could you do some research on it for me?
+==================================[1m Ai Message [0m==================================
+
+[{'text': "Certainly! I'd be happy to research LangGraph for you. To get the most up-to-date and comprehensive information, I'll use the Tavily search engine to look this up. Let me do that for you now.", 'type': 'text'}, {'id': 'toolu_01R4ZFcb5hohpiVZwr88Bxhc', 'input': {'query': 'LangGraph framework for building language model applications'}, 'name': 'tavily_search_results_json', 'type': 'tool_use'}]
+Tool Calls:
+  tavily_search_results_json (toolu_01R4ZFcb5hohpiVZwr88Bxhc)
+ Call ID: toolu_01R4ZFcb5hohpiVZwr88Bxhc
+  Args:
+    query: LangGraph framework for building language model applications
+```
+
+이 시점에서 **graph.get_state(config)**로 상태를 확인하여 `tools`노드에 중단된 상태를 확인할 수 있습니다.
+
+```python
+snapshot = graph.get_state(config)
+snapshot.next
+```
+
+```text
+('tools',)
+```
+
+**next** 값이 `tools`로 설정되어 있으면, 중단된 상태에서 검토를 수행한 수 작업을 계속할 수 있습니다.
+
+### 4. 작업 재개
+
+검토 후 `None`을 전달해 그래프가 중단된 지점에서 이어서 실행되도록 합니다.
+
+```python
+events = graph.stream(None, config, stream_mode="values")
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+챗봇은 이전 중단 지점에서 이어받아 결과를 제공합니다.
+
+이제 **interrupt_before**기능을 활용해 인간의 개입을 요구하는 단계에서 작업을 중단할 수 있습니다. 이를 통해 agent의 신뢰성을 높이고, 필요한 경우 인간의 검토 후 작업을 이어갈 수 있게 되었습니다.
+
+LangGraph의 체크포인터가 이미 포함되어 있으므로, 작업을 무기한 중단하고 언제든지 이어서 작업을 수행할 수 있습니다.
+
+여기까지 LangGraph를 활용한 챗봇 구축의 흐름을 알아보았습니다. 끝까지 정리를 하면 포스팅이 너무 길어질 것 같아 나머지 파트는 다음 포스팅에서 정리해보도록 하겠습니다.
+
+긴 글 읽어주셔서 감사합니다!
