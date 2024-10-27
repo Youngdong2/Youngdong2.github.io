@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "LangGraph 튜토리얼 완벽 정리"
+title: "LangGraph 튜토리얼 완벽 정리(1)"
 categories: LLM
 use_math: false
 comments: true
