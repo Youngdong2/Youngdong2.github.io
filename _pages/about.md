@@ -7,31 +7,38 @@ author_profile: true
 
 # 안녕하세요
 
-시계열 데이터와 AI/ML에 관심이 많은 개발자 Dongdong입니다.
+AI Engineer로 일하고 있는 김영동입니다.
+
+시계열 데이터 분석부터 AI Agent 개발까지, 데이터와 AI를 활용한 문제 해결에 관심이 많습니다.
+
+## 경력
+
+**AI Engineer @ Nkia** (2021.11 - 현재)
+- RCA(Root Cause Analysis) Agent 개발
+- AI Assistant Chatbot 개발
+- RAG 기반 매뉴얼 검색 시스템 구축
+- 시계열/로그 이상 탐지 시스템 개발
+
+## 활동
+
+- **Hugging Face KREW** Ko-AgentBench 평가팀 리드
+- **가짜연구소** FinAgent Trading Team Leader
+- **글또** 8~10기
 
 ## 관심 분야
 
-- **Time Series Analysis**: 시계열 데이터 분석 및 예측
-- **Machine Learning**: 이상 탐지, 인과 추론
-- **Large Language Models**: LLM 활용 및 AI Agent 개발
-- **MLOps / AIOps**: ML 시스템 운영 및 자동화
+- AI Agent & Multi-Agent Systems
+- Time Series Analysis
+- LLM Application Development
+- MLOps / AIOps
 
 ## 기술 스택
 
-**Languages**
-- Python
+**Languages & Frameworks**
+- Python, LangChain, LangGraph
 
-**Frameworks & Libraries**
-- PyTorch, TensorFlow
-- LangChain, LangGraph
-- Pandas, NumPy, Scikit-learn
+**Database & Search**
+- MongoDB, Milvus
 
-**Tools**
-- Git, Docker
-- Jupyter Notebook
-
-## 연락처
-
-- Email: nasa1993@naver.com
-- GitHub: [Youngdong2](https://github.com/Youngdong2)
-- Instagram: [@zer0dong_](https://www.instagram.com/zer0dong_/)
+**Infrastructure**
+- FastAPI, Docker
