@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Session 2 인과추론을 위한 연구 디자인"
-categories: Causal_Inference
+categories: AI/ML
 use_math: true
 comments: ture
 toc: true

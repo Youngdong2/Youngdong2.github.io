@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Session 1 인과추론의 다양한 접근법"
-categories: Causal_Inference
+categories: AI/ML
 use_math: true
 comments: ture
 toc: true

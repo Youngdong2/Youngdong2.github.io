@@ -1,5 +1,7 @@
 # main links
 main:
+  - title: "About"
+    url: /about/
   - title: "Category"
     url: /categories/
   - title: "Tag"
@@ -8,12 +10,14 @@ main:
     url: /search/
 
 docs:
-  - title: "A.I"
+  - title: "Categories"
     children:
-      - title: "Paper_Review"
-        url: /categories/
-      - title: "Tag"
-        url: /tags/
+      - title: "AI/ML"
+        url: /categories/#ai-ml
+      - title: "Engineering"
+        url: /categories/#engineering
+      - title: "etc"
+        url: /categories/#etc
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"

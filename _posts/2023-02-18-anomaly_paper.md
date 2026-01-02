@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "[Paper Review] FluxEV: A Fast and Effective Unsupervised Framework Time-series Anomaly Detection(WSDM, 2021)"
-categories: Paper_Review
+categories: AI/ML
 use_math: true
 comments: ture
 toc: true

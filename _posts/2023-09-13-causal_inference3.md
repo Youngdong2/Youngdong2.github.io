@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Session 7 인과 그래프"
-categories: Causal_Inference
+categories: AI/ML
 use_math: true
 comments: ture
 toc: true
